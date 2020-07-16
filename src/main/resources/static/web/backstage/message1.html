@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		
+		<title>用户-后台管理</title>
+		<link href="https://cdn.bootcss.com/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+		
+		<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
+		<script src="https://cdn.bootcss.com/materialize/1.0.0/js/materialize.min.js"></script>
+		<style>
+			div{
+				border: 1px solid black;
+			}
+			.header{
+				width: 100%; height: 100px; 
+				text-align: center; 
+				margin-bottom: 10px;
+				line-height: 100px;
+			}
+			img{
+				width:30px;
+				height:30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<h2>用户管理</h2>
+		</div>
+		<div class="row">
+			<div class="col s2" style="height: 100%">
+				<ul type="none">
+					<li>
+						<h3><a href="./user.html" target="body">用户管理</a></h3>
+					</li>
+					<li>
+						<h3><a href="./role.html" target="body">角色管理</a></h3>
+					</li>
+					<li>
+						<h3><a href="./article1.html" target="body">文章管理</a></h3>
+					</li>
+					<li>
+						<h3><a href="./comment.html" target="body">评论管理</a></h3>
+					</li>
+					<li>
+						<h3><a href="./message1.html" target="body">留言管理</a></h3>
+					</li>
+					<li>
+						<h3><a href="../../../" target="body">主页</a></h3>
+					</li>
+				</ul>
+			</div>
+			<div class="col s10" style="min-height:600px;float: right;">
+				<table class="bordered highlight responsive-table">
+				        <thead id="user-header">
+				          
+				        </thead>
+				
+				        <tbody id="user-list">
+				         
+				        </tbody>
+				      </table>
+			</div>
+		</div>
+		<script type="text/javascript">
+		$(function() {
+			showAllUsers();
+		})
+		
+		function showAllUsers(){
+			$.ajax({
+                "url": "/comments/getByArticleIsNull",
+                // "cache": false,
+                "type": "get",
+                "dataType": "json",
+                "success": function (json) {
+                	console.log(json)
+                    if (json.state == 2000) {
+                    	var list=json.data;
+                    	var html = 
+                    	'<tr>'+
+			              '<th data-field="id">id</th>'+
+			              '<th data-field="pid">pid</th>'+
+			              '<th data-field="content">评论内容</th>'+
+			              '<th data-field="uid">评论用户id</th>'+
+			              '<th data-field="nickName">昵称</th>'+
+			              '<th data-field="createTime">创建时间</th>'+
+			              '<th data-field="reUid">回复用户id</th>'+
+			              '<th data-field="reNickName">回复用户昵称</th>'+
+						  '<th data-field="operation">操作</th>'+
+			          '</tr>';
+			          $("#user-header").append(html);
+			          for(var i=0;i<list.length;i++){
+			        	  var html = 
+			        		  '<tr>'+
+						    '<td>#{id}</td>'+
+						    '<td>#{pid}</td>'+
+						    '<td>#{content}</td>'+
+						    '<td>#{uid}</td>'+
+						    '<td>#{nickName}</td>'+
+						    '<td>#{createTime}</td>'+
+						    '<td>#{reUid}</td>'+
+						    '<td>#{reNickName}</td>'+
+							'<td>'+
+								'<span style="color: red;" onclick="deleteU(&quot;' + list[i].id + '&quot;)">删除</span>'+
+							'</td>'+
+						  '</tr>';
+						  
+			        	  html = html.replace(/#{id}/g, list[i].id);
+			        	  html = html.replace(/#{pid}/g, list[i].pid);
+			        	  html = html.replace(/#{content}/g, list[i].content);
+			        	  html = html.replace(/#{uid}/g, list[i].user.id);
+			        	  html = html.replace(/#{nickName}/g, list[i].user.nickName);
+			        	  html = html.replace(/#{createTime}/g, list[i].createTime);
+			        	  if(list[i].replyUser.length!=0){
+			        		  html = html.replace(/#{reUid}/g, list[i].replyUser.id);
+				        	  html = html.replace(/#{reNickName}/g, list[i].replyUser.nickName);
+			        	  }
+			        	  html = html.replace(/#{reUid}/g, "");
+			        	  html = html.replace(/#{reNickName}/g,"");
+			        	  
+			        	  
+			        	  $("#user-list").append(html);
+			          }
+                    } else {
+                       
+                    }
+                }
+            })
+		}
+		
+		function deleteU(id){
+			var msg = "您真的确定要删除吗？\n\n请确认！";
+			if (confirm(msg) == true) {
+				$.ajax({
+					"url": "/comments/admin/" + id,
+					// "cache": false,
+					"type": "get",
+					"dataType": "json",
+					"success": function(json) {
+						if (json.state == 2000) {
+							alert("删除成功")
+							window.location.reload();
+						} else {
+							alert("删除失败！" + json.message + "！");
+						}
+					}
+				})
+				return true;
+			} else {
+				return false;
+			}
+		}
+		</script>
+	</body>
+</html>

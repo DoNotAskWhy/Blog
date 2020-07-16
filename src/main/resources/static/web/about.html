@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>星海星辰-写博客</title>
+		<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+
+		<link href="https://cdn.bootcss.com/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+		<script src="https://cdn.bootcss.com/materialize/1.0.0/js/materialize.min.js"></script>
+		<link rel="stylesheet" href="../css/matery.css" />
+		<style>
+			body {
+			    display: flex;
+			    min-height: 100vh;
+			    flex-direction: column;
+			  }
+			/* .row .col{
+				float: left;
+				    box-sizing: border-box;
+				    padding: 0 0.75rem;
+				    min-height: 1px;
+			} */
+			  main {
+			    flex: 1 0 auto;
+			  }
+			  .left{
+				 margin-left: 100px;
+			  }
+			  #upload{
+				  margin-top: 20px;
+			  }
+			  li{
+			  	margin-bottom: 20px;
+			  }
+			   li>span{
+				  font-size: 20px;
+			  }
+			  	#change{
+				  color: #0000FF;
+			  }
+		</style>
+	</head>
+	<body>
+		<header class="navbar-fixed">
+			<nav class="bg-color">
+				<div class="nav-wrapper" id="nva-ontainer">
+					<div class="brand-logo">
+						<a href="/" class="waves-effect waves-light">
+
+							<img src="../img/logo.png" data-original="https://cdn.jsdelivr.net/gh/athink8/athink8.github.io/medias/logo.png"
+							 class="logo-img" alt="LOGO">
+							<!-- <img class="responsive-img" src="cool_pic.jpg"> -->
+
+							<span class="logo-span">星海星辰</span>
+						</a>
+					</div>
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						
+					</ul>
+					</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<main>
+			<div class="container" style="margin-top: 20px;width: 95%;">
+				<div class="card">
+					<div class="row">
+						<div class="title center-align" style="color: black; border-bottom: 1px solid #000000;">
+							个人资料
+						</div>
+						<div>
+							<div class="col s6 center-align">
+								<img id="#avatar" class="responsive-img circle" style="width: 150px; height: 150px;" src="../img/6.jpg">
+								<form id="form-change-avatar" action="/file/change_avatar" method="post" enctype="multipart/form-data"
+								 class="form-horizontal" role="form">
+									<input name="file" type="file">
+									<div id="upload">
+										<input id="btn-change-avatar" type="button" class="btn btn-primary" value="上传">
+									</div>
+								</form>
+
+							</div>
+							<div id="information" class="col s6">
+								<ul>
+									<li>
+										<span>
+											昵称：
+										</span>
+									</li>
+									<li>
+										<span>
+											介绍：
+										</span>
+									</li>
+								</ul>
+								<span id="change">修改信息</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<footer class="page-footer bg-color">
+			<div class="container">
+				<div class="row">
+					<div class="col l6 s12">
+						<p class="grey-text text-lighten-4">目前网站还处于测试阶段，欢迎使用</p>
+					</div>
+					<div class="col l4 offset-l2 s12">
+						
+					</div>
+				</div>
+			</div>
+			<div class="footer-copyright">
+				<div class="container">
+					© 2020 Copyright xhxc
+					<a href='http://www.beian.miit.gov.cn/' target='_blank' style="font-size: 1em;text-decoration: none;color: white;">滇ICP备19011072号</a>
+				</div>
+			</div>
+		</footer>
+		<script>
+		var avatar = document.getElementById("#avatar");
+			$(function(){
+				showUser();
+			    
+			});
+			$("#btn-change-avatar").click(function() {
+				$.ajax({
+					"url": "/file/change_avatar",
+					// "cache": false,
+					"data": new FormData($("#form-change-avatar")[0]),
+					"contentType": false,
+					"processData": false,
+					"type": "post",
+					"dataType": "json",
+					"success": function(json) {
+						if (json.state == 2000) {
+							alert("上传头像成功!")
+							/* console.log(json.data); */
+							avatar.src = json.data
+						} else {
+							alert("上传头像失败!" + json.message);
+						}
+					},
+					"error": function() {
+						alert("您的登录信息已经近过期!请重新登录!")
+					}
+				});
+			});
+			function change(){
+				
+				$("#information").empty();
+				$.ajax({
+					"url": "/user/showUsername",
+					// "cache": false,
+					"type": "post",
+					"dataType": "json",
+					"success": function(json) {
+						var list = json.data
+						if (json.state == 2000) {
+							var html = 
+								'<form id="updataX" method="post">' +
+							'昵称：<input id="nickName" type="text" name="nickName" />'+
+								'简介：<textarea id="synopsis" name="synopsis"></textarea>'+
+								'<input onclick="updata()" type="button" value="修改"/>'+
+							'</form>';
+							
+							$("#information").append(html);
+							$("#nickName").val(list.nickName);
+							$("#synopsis").val(list.synopsis);
+						} else {
+							alert("上传头像失败!" + json.message);
+						}
+					},
+					"error": function() {
+						alert("您的登录信息已经近过期!请重新登录!")
+					}
+				});
+			};
+			
+			function showUser(){
+				$("#information").empty();
+				$.ajax({
+					"url": "/user/showUsername",
+					// "cache": false,
+					"type": "post",
+					"dataType": "json",
+					"success": function(json) {
+						console.log(json);
+						var list = json.data;
+						if (json.state == 2000) {
+							var html = 
+					'<ul>'+
+							'<li>' +
+							'<span>昵称：#{nickName}</span>' +
+						'</li>' +
+						'<li>'+
+							'<span>介绍：#{synopsis}</span>' +
+						'</li>'+
+						'<span id="change" onclick="change()">修改信息</span>' +
+					'</ul>';
+						html = html.replace(/#{nickName}/g, list.nickName);
+						html = html.replace(/#{synopsis}/g, list.synopsis);
+						avatar.src = list.avatar;
+						$("#information").append(html);
+						} else {
+						}
+					},
+					"error": function() {
+						alert("您的登录信息已经近过期!请重新登录!")
+					}
+				});
+			}
+			function updata(){
+				$.ajax({
+					"url": "/user/updataInformation",
+					// "cache": false,
+					"type": "post",
+					"data":$("#updataX").serialize(),
+					"dataType": "json",
+					"success": function(json) {
+						console.log(json);
+						var list = json.data;
+						if (json.state == 2000) {
+							alert("修改成功");
+							window.location.replace("/web/about.html");
+						} else {
+							alert(json.message);
+						}
+					},
+					"error": function() {
+						alert("您的登录信息已经近过期!请重新登录!")
+					}
+				}); 
+			}
+		</script>
+	</body>
+</html>

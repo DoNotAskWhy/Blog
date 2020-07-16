@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8" />
+		<title>星海星辰-写博客</title>
+		<link rel="stylesheet" href="../editor/css/style.css" />
+		<link rel="stylesheet" href="../editor/css/editormd.css" />
+		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.css" rel="stylesheet">
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+		<style>
+			.row .col{
+			height: 100%;
+		}
+		#article{
+			line-height: 50px;
+		}
+		.btn{
+			color: #000000;
+			margin-top: 6px;
+		}
+		#tag input{
+			width: 140px !important;
+		}
+		#sort input{
+			width: 140px !important;
+		}
+		.col span{
+			/* font-size: 10px; */
+		}
+		.card{
+			min-height:1000px
+		}
+	</style>
+	</head>
+	<body>
+		<div class="row" style="margin-bottom: 0px; height: 50px; background-color: floralwhite;">
+			<div class="col s1">
+				<a id="article" href="article/article-management.html">文章管理</a>
+			</div>
+			<div class="col s9">
+				<input id="abc" autocomplete="off" style="width: 90%;" placeholder="请输入文章标题"/><span id="wordCountShow">0/5</span>
+			</div>
+			<div class="col s1">
+				<a id="save" href="#" class="btn waves-effect waves-red" style="background-color: white;">保存草稿</a>
+			</div>
+			<div class="col s1">
+				<a href="#modal1" class="btn waves-effect waves-red" style="background-color: #E33E33; color: white;">发布</a>
+			</div>
+		</div>
+		<div id="layout">
+			<div id="test-editormd">
+				<textarea style="display:none;" id="textContent" name="textContent"></textarea>
+				<!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
+				<textarea id="text" class="editormd-html-textarea" name="text"></textarea>
+			</div>
+		</div>
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<h4>发布文章</h4>
+				<div class="row">
+					<div style="line-height: 64px;" class="col s2"><span>文章标签:</span></div>
+					<div id="tag" class="col s10 chips chips-placeholder"></div>
+					<div style="line-height: 64px;" class="col s2"><span>分类专栏:</span></div>
+					<div id="sort" class="col s10 chips chips-placeholder"></div>
+					<div class="col s2"><span>发布形式:</span></div>
+					<div class="col s10">
+						<p>
+							<input class="with-gap" name="group1" type="radio" value="0" id="test1" />
+							<label for="test1">公开</label>
+
+							<input class="with-gap" name="group1" type="radio" value="1" id="test2" />
+							<label for="test2">私密</label>
+
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">取消</a>
+				<a href="#!" id="ok" class=" modal-action modal-close waves-effect waves-green btn-flat">发布</a>
+			</div>
+		</div>
+		<!-- <div>
+    <button onclick="saveHtml()">保存</button>
+</div> -->
+		<script src="../js/jquery-3.4.1.min.js"></script>
+		<script src="../editor/editormd.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+		<script type="text/javascript">
+			var testEditor;
+
+			$(function() {
+				var jsonTag = [];
+				var jsonSort = [];
+
+				$("#abc").wordCount(50, $("#wordCountShow"));
+
+
+				$('.chips-placeholder').material_chip({
+					placeholder: '输入一个标签',
+					secondaryPlaceholder: '添加标签，回车结束',
+				});
+
+				$('.modal').modal({
+					dismissible: true, // Modal can be dismissed by clicking outside of the modal
+					opacity: .5, // Opacity of modal background
+					in_duration: 300, // Transition in duration
+					out_duration: 200, // Transition out duration
+					starting_top: '4%', // Starting top style attribute
+					ending_top: '10%', // Ending top style attribute
+					ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+						// alert("Ready");
+						console.log(modal, trigger);
+					},
+					// complete: function() { alert('Closed'); } // Callback for Modal close
+				});
+				$("#save").click(function(){
+					if($("#abc").val().length == 0 || $("#abc").val() == null){
+						alert("文章标题不能为空");
+						return false;
+					}
+					if($("#textContent").text().length == 0 || $("#textContent").text() == null){
+						alert("请输入文章内容");
+						return false;
+					}
+					var aj =　{
+							title:$("#abc").val(),
+							content:$("#text").text(),
+							textContent:$("#textContent").text(),
+							form:2
+						} 
+					
+					$.ajax({
+						url: "/article/editorWeb",
+						type: "post",
+						contentType: "application/json;charset=UTF-8",
+						async: true,
+						data: 
+							/* "title":$("#abc").val(),
+							"content": $("#text").text(),
+							"textContent": $("#textContent").text(), */
+							JSON.stringify(aj),
+							/* "form":$('input:radio:checked').val() */
+						
+						dataType: "json",
+						success: function(json) {
+							alert("保存成功");
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							alert(XMLHttpRequest.status);
+							alert(XMLHttpRequest.readyState);
+							alert(textStatus); // paser error;
+						}
+					});
+				})
+				
+				$("#ok").click(function() {
+					if($("#abc").val().length == 0 || $("#abc").val() == null){
+						alert("文章标题不能为空");
+						return false;
+					}
+					if($("#textContent").text().length == 0 || $("#textContent").text() == null){
+						alert("请输入文章内容");
+						return false;
+					}
+					if($('input:radio:checked').length == 0 || $("#textContent").val() == null){
+						alert("请输入选择发布形式");
+						return false;
+					}
+					// console.log($('#tag').find('div').length);
+					// var json = [];
+					var allChildDiv = $('#tag').find("div"); //找到addDiv下面的所有div
+					var allChildDiv1 = $('#sort').find("div");
+					for (var a = 0; a < allChildDiv.length; a++) {
+						allChildDiv.eq(a).find('i').text("");
+						// console.log(allChildDiv.eq(a).find('i').text())
+						// console.log(allChildDiv.eq(a).text())
+						jsonTag.push({
+								"name":allChildDiv.eq(a).text()});
+						allChildDiv.eq(a).find('i').text("close");
+					};
+					for (var a = 0; a < allChildDiv1.length; a++) {
+						allChildDiv1.eq(a).find('i').text("");
+						// console.log(allChildDiv.eq(a).find('i').text())
+						// console.log(allChildDiv.eq(a).text())
+						jsonSort.push({
+							"name":allChildDiv1.eq(a).text()});
+						allChildDiv1.eq(a).find('i').text("close");
+					};
+					console.log($('input:radio:checked').val())
+					
+					console.log("tag:" + JSON.stringify(jsonTag))
+					console.log("sort:"+ JSON.stringify(jsonSort))
+					var aj =　{
+						title:$("#abc").val(),
+						content:$("#text").text(),
+						textContent:$("#textContent").text(),
+						form:$('input:radio:checked').val(),
+						tags:jsonTag,
+						sorts:jsonSort
+					} 
+					console.log($("#textContent").text());
+					$.ajax({
+						url: "/article/editorWeb",
+						type: "post",
+						contentType: "application/json;charset=UTF-8",
+						async: true,
+						data: 
+							/* "title":$("#abc").val(),
+							"content": $("#text").text(),
+							"textContent": $("#textContent").text(), */
+							JSON.stringify(aj),
+							/* "form":$('input:radio:checked').val() */
+						
+						dataType: "json",
+						success: function(json) {
+							
+							alert("发布成功");
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							alert(XMLHttpRequest.status);
+							alert(XMLHttpRequest.readyState);
+							alert(textStatus); // paser error;
+						}
+					});
+					jsonTag = []
+					jsonSort = []
+				});
+				
+				var h = window.innerHeight - 65;
+				testEditor = editormd("test-editormd", {
+					width: "100%",
+					height: h,
+					syncScrolling: "single",
+					path: "../editor/lib/",
+					imageUpload: true,
+					imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+					imageUploadURL: "/file",
+					//这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
+					saveHTMLToTextarea: true
+					// previewTheme : "dark"
+				});
+				
+			});
+
+			
+			$.fn.extend({
+			  wordCount: function (maxLength, wordWrapper) {
+			    var self = this;
+			    $(self).attr("maxlength", maxLength);
+			    showWordCount();
+			    $(this).on("input propertychange", showWordCount);
+			    function showWordCount() {
+			      curLength = $(self).val().length;
+			      // var leaveCount = maxLength - curLength;
+			      // wordWrapper.text(leaveCount + "/" + maxLength);
+					wordWrapper.text(curLength + "/" + maxLength);
+			    }
+			  }
+			})
+		</script>
+	</body>
+</html>

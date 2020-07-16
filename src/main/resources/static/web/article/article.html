@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>星海星辰-写博客</title>
+		<link href="https://cdn.bootcss.com/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+		
+		<link rel="stylesheet" href="../../css/matery.css" />
+		<link rel="stylesheet" href="../../editor/css/style.css" />
+		<link rel="stylesheet" href="../../editor/css/editormd.css" />
+		<link rel="stylesheet" href="../../font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/comment.css" />
+		<style>
+			.vwrap{
+				border: 1px solid #f0f0f0;
+				border-radius: 4px;
+				margin-bottom: 10px;
+				overflow: hidden;
+				position: relative;
+				padding: 10px;
+			}
+			.vedit{
+				
+			}
+			.veditor {
+			    width: 100%;
+			    min-height: 8.75em;
+			    font-size: .875em;
+			    background: transparent;
+			    resize: vertical;
+			    -webkit-transition: all .25s ease;
+			    transition: all .25s ease;
+			}
+			#veditor{
+				border: none;
+				    resize: none;
+				    outline: none;
+				    padding: 10px 5px;
+				    max-width: 100%;
+				    font-size: .775em;
+			}
+			.comment{
+				padding: 10px;
+			}
+			.submit{
+				width: 50px;
+				height: 30px;
+				background-color: linen;
+				border-radius: 12px;
+			}
+			.vempty{
+				padding: 1.25em;
+				    text-align: center;
+				    color: #999;
+			}
+			.box2 .say{
+				display: block;
+				width: 780px;
+			}
+			.box3 .say{
+				display: block;
+				width: 720px;
+			}
+			#fabulous{
+				margin-right: 20px;
+			}
+			.right span{
+				color:blue;
+				margin-right: 20px;
+			}
+			.s1 span{
+				color:blue;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="navbar-fixed">
+			<nav class="bg-color">
+				<div class="nav-wrapper" id="nva-ontainer">
+					<div class="brand-logo">
+						<a href="/" class="waves-effect waves-light">
+
+							<img src="../../img/logo.png" data-original="https://cdn.jsdelivr.net/gh/athink8/athink8.github.io/medias/logo.png"
+							 class="logo-img" alt="LOGO">
+							<!-- <img class="responsive-img" src="cool_pic.jpg"> -->
+
+							<span class="logo-span">星海星辰</span>
+						</a>
+					</div>
+					<!-- <ul id="nav-mobile" class="right hide-on-med-and-down">
+						<li><a href="sass.html">Sass</a></li>
+						<li><a href="badges.html">组件</a></li>
+						<li class="item">
+					</ul> -->
+					</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<!-- <div id="layout"> -->
+		<div class="container" style="margin-top: 20px;width: 95%;">
+			<div class="card">
+				<div class="row">
+					<div class="col s3">
+						<span style="margin-right: 20px;" id="author">作者</span>
+						<span id="date">创建时间</span>
+					</div>
+					<div class="col s8"></div>
+					<div id="up" class="col s1">
+					</div>
+				</div>
+			</div>
+			<div class="card">
+				<div id="test-markdown-view">
+					<!-- Server-side output Markdown text -->
+					<textarea id="html" style="display:none;"></textarea>
+				</div>
+				<div style="background-color: #93A1A1;">
+					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+					<span id="fabulous">点赞0</span>
+					<i class="fa fa-commenting-o" aria-hidden="true"></i>
+					<span id="commentSize">评论0</span>
+				</div>
+			</div>
+			<div class="card">
+				<div>
+					<i class="fa fa-comments fa-2x"></i>
+					<span style="font-size: 27px; font-weight: 700;">评论</span>
+				</div>
+				<div class="comment">
+					<div class="vwrap">
+						<div class="vedit">
+							<textarea id="veditor" class="veditor vinput" placeholder="请输入你的评论">
+							</textarea>
+						</div>
+						<div class="vcontrol">
+							<div class="right">
+								<button type="button" class="submit" onclick="comment()">评论</button>
+							</div>
+						</div>
+					</div>
+					<div id="comment-list" class="vempty" style="display:block;">
+						<!-- 快来做第一个评论的人吧~ -->
+						<ul id="layout">
+							<li class="feed">
+								<div id="comments" class="box1"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/jquery-3.4.1.min.js"></script>
+		<script src="https://cdn.bootcss.com/materialize/1.0.0/js/materialize.min.js"></script>
+		<script src="../../editor/editormd.min.js"></script>
+		<script src="../../editor/lib/marked.min.js"></script>
+		<script src="../../editor/lib/prettify.min.js"></script>
+		<script>
+			var aid;
+			var username;
+			var commentId; 
+			var replyId;
+			var userId;
+			$(function() {
+				$.getUrlParam = function (name) {
+                	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                	var r = window.location.search.substr(1).match(reg);
+                	if (r != null) return unescape(r[2]); return null;
+           		 }
+
+           			 //得到url参数
+            	aid = $.getUrlParam('aid');
+            	console.log(aid);
+				showArticle(aid);
+				judge();
+				/* $("#html").val("# 哈"); //将需要转换的内容加到转换后展示容器的textarea隐藏标签中 */
+				//扩展方法获取url参数
+            	$("#fabulous").click(function(){
+            		$.ajax({
+    	                "url": "/article/addFabulous?aid="+ aid,
+    	                // "cache": false,
+    	                "type": "get",
+    	                "dataType": "json",
+    	                "success": function (json) {
+    	                	console.log(json)
+    	                    if (json.state == 2000) {
+    	                    	window.location.reload();
+    	                    } else {
+    	                       
+    	                    }
+    	                }
+    	            })
+            	})
+
+				
+			});
+			
+			
+			function showArticle(aid){
+				$("#veditor").empty();
+				$("#author").empty();
+				$("#date").empty();
+				$.ajax({
+	                "url": "/article/details/"+ aid,
+	                // "cache": false,
+	                "type": "get",
+	                "dataType": "json",
+	                "success": function (json) {
+	                	console.log(json)
+	                    if (json.state == 2000) {
+	                    	var testView = editormd.markdownToHTML("test-markdown-view", {
+	        					markdown :json.data.textContent, // Also, you can dynamic set Markdown text
+	        					htmlDecode : true,  // Enable / disable HTML tag encode.
+	        					htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+	        				});
+	                    	userId = json.data.user.id;
+	                    	console.log(userId);
+	                    	$("#author").text(json.data.user.nickName)
+	        				$("#date").text(json.data.date);
+	                    	$("#commentSize").text("评论" + json.data.commentSize)
+	                    	$("#fabulous").text("点赞" + json.data.fabulousSize)
+	                    	console.log(json.data.commentList.length)
+	                    	if(json.data.commentList.length == 0){
+	                    		console.log()
+	                    		/* $("#comment-list").empty(); */
+	                    		$("#comment-list").html("快来做第一个评论的人吧~");
+	                    	}else{
+	                    		showComments();
+	                    	}
+	                    } else {
+	                        alert("查看文章失败！" + json.message + "！");
+	                    }
+	                }
+	            })
+			}
+			
+			function comment(){
+				console.log(commentId);
+				console.log(replyId)
+				if(commentId != null || replyId != null){
+					$('#veditor').attr('placeholder','@' + username);
+				}
+				$('#veditor').focus();
+				if($('#veditor').val() == ""){return false;}
+				$.ajax({
+	                "url": "/comments/release",
+	                // "cache": false,
+	                "type": "post",
+	                "data":{
+	                	"articleId":aid,
+						"replyId": commentId,
+						"commentId": commentId,
+						"commentContent":$("#veditor").val()
+	                },
+	                "dataType": "json",
+	                "success": function (json) {
+	                    if (json.state == 2000) {
+	                    	console.log(json);
+	                    	window.location.reload();
+	                    } else {
+	                       
+	                    }
+	                }
+	            })
+	            username = null;
+				commentId = null;
+				replyId = null;
+			}
+			
+			function showComments(){
+				console.log(aid);
+				$.ajax({
+	                "url": "/comments/getAllComments?aid=" + aid,
+	                // "cache": false,
+	                "type": "post",
+	                "dataType": "json",
+	                "success": function (json) {
+	                	console.log()
+	                    if (json.state == 2000) {
+	                    	console.log(json)
+	                    	var list = json.data;
+	                    	for(var i=0;i<list.length;i++){
+	                    	var html = 
+	        					
+	        					'<div class="box2">'+
+	        				'<div class="avatar">'+
+	        					'<img id="avatar" src="#{avatar}" alt="" />'+
+	        				'</div>'+
+	        				'<div class="box2_comments">'+
+	        					'<a href=""><span id="nickName">#{nickName}</span></a>'+
+	        					'<span class="right">'+
+	        						'<span onclick="deleteC(&quot;' + list[i].id + '&quot;)">删除</span>'+
+	        						'<span onclick="replyComment(&quot;' + list[i].id + '&quot;,&quot;' + list[i].id + '&quot;,&quot;' + list[i].user.nickName + '&quot;)">回复</span>'+
+	        					'</span>'+
+	        					'<span id="content" class="say">#{content} '+
+	        					'</span>';
+	        				
+	        				if(list[i].commentVOs.length == 0){
+	        					html = html +
+	        					'</div>'+
+	        					'<div class="clear">'+
+		        				'</div>'+
+			        			'</div>'; 
+	        				}
+	        				
+	        				for(var j=0;j<list[i].commentVOs.length;j++){
+	        					html = html +
+	        					'<div class="box3">' + 
+												'<div class="avatar">'+
+													'<img src="#{avatar1}" alt="" />'+
+												'</div>'+
+												'<div class="box3_comments">'+
+													'<a href=""><span>#{user}回复#{replyUser}</span></a>'+
+													'<span class="right">' +
+													'<span onclick="deleteC(&quot;' + list[i].commentVOs[j].id + '&quot;)">删除</span>'+
+													'<span onclick="replyComment(&quot;' + list[i].id + '&quot;,&quot;' + list[i].commentVOs[j].id + '&quot;,&quot;' + list[i].commentVOs[j].user.username + '&quot;)">回复</span>'+
+													'</span>'+
+													'<span class="say">#{content1} '+
+													'</span>'+
+												'</div>'+
+											'</div>';
+											
+											html = html + 
+				        					'<div class="clear">'+
+					        				'</div>';
+						        			
+											html = html.replace(/#{replyUser}/g, list[i].commentVOs[j].replyUser.username);
+											html = html.replace(/#{user}/g, list[i].commentVOs[j].user.username);
+					        				html = html.replace(/#{content1}/g, list[i].commentVOs[j].content);
+					        				html = html.replace(/#{avatar1}/g,list[i].commentVOs[j].user.avatar);
+	        				}
+	        				html = html + 
+	        				'</div>' +
+	        				'<div class="clear">'+
+	        				'</div>' +
+	        				'</div>';
+	        				
+	        				html = html.replace(/#{nickName}/g, list[i].user.nickName);
+	        				html = html.replace(/#{content}/g, list[i].content);
+	        				html = html.replace(/#{avatar}/g,list[i].user.avatar)
+	        				$("#comments").append(html);
+	        				
+	                    } 
+	                }
+	                }
+	            })
+				
+			}
+			
+			function deleteC(id){
+				$.ajax({
+	                "url": "/comments/" + id,
+	                // "cache": false,
+	                "type": "post",
+	                "dataType": "json",
+	                "success": function (json) {
+	                	
+	                	if(json.state == 200){
+	                		alert("这不是你的评论")
+	                	}
+	                	
+	                    if (json.state == 2000) {
+	                    	
+	                    	window.location.reload();
+	                    } else {
+	                       
+	                    }
+	                }
+	            })
+			}
+			
+			function judge(){
+				$.ajax({
+					"url": "/user/showUsername",
+					// "cache": false,
+					"type": "post",
+					"dataType": "json",
+					"success": function(json) {
+						console.log(json);
+						var list = json.data;
+						console.log(list.id == userId)
+						if(json.state == 2000){
+							if(list.id == userId){
+								$("#up").html('<span onclick="updata()">修改</span>');
+							}
+						}
+					}
+				})
+			}
+			
+			function updata(){
+				window.location.href = "/web/editU.html?aid=" + aid;
+			}
+				
+			function replyComment(cId,rId,uname){
+				username = uname;
+				commentId = cId;
+				replyId = rId;
+				comment();
+			}
+		</script>
+	</body>
+</html>

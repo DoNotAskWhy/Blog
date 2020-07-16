@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>星海星辰-登录</title>
+		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.css" rel="stylesheet">
+
+		<script src="../js/jquery-3.4.1.min.js"></script>
+		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
+		<link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../css/matery.css">
+
+		<style>
+			canvas { width: 100%; height: 100%; position: absolute; z-index: -1;}
+</style>
+	</head>
+
+	<body>
+
+		<div class="center-layout form">
+			<div class="row" style="padding: 30px;">
+				<form id="form-login" class="col s12" method="post" action="/login">
+					<div class="row">
+						<h2 class="center-align">登录</h2>
+						<div class="input-field col s12">
+							<i class="material-icons prefix fa fa-envelope-square"></i>
+							<input id="icon_prefix" type="text" class="validate" name="username">
+							<label for="icon_prefix">邮箱</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix fa fa-key"></i>
+							<input id="icon_telephone" type="password" class="validate" name="password">
+							<label for="icon_telephone">密码</label>
+						</div>
+					</div>
+					<div class="col s12">
+						<p style="float: left;">
+							<input type="checkbox" id="test5" name="remember-me"/>
+							<label for="test5">记住密码</label>
+						</p>
+						<p style="float: right;">
+							<a href="/web/findByPassword.html">忘记密码</a>
+						</p>
+					</div>
+					<div class="input-field col s12">
+						<button id="login" class="btn waves-effect waves-light center-layout btn-lr" type="submit">登录
+						</button>
+					</div>
+					<div class="input-field col s12">
+						<!-- <a href="/web/register.html">还没有账号，注册一个</a> -->
+						<a href="">还没有账号，注册一个</a>
+					</div>
+
+				</form>
+			</div>
+		</div>
+		<canvas></canvas>
+		<script type="text/javascript" src="../js/background.js"></script>
+		<script type="text/javascript">
+		$("#login").click(function () {
+			//验证邮箱
+			if ($("input[name='username']").val().length == 0) {
+				alert("邮箱不能为空!");
+				return false;
+			}
+			console.log($("input[name='password']").val().length)
+			if ($("input[name='password']").val().length == 0) {
+				alert("密码不能为空!");
+				return false;
+			}else{
+				
+			}
+		});
+		
+		/* $(".btn-lr").click(function () {
+			$.ajax({
+				"url":"/login/error",
+				// "cache": false,
+				/* "data":$("#form-login").serialize(), 
+				"type":"post",
+				"dataType":"json",
+				"success":function (json) {
+					alert(json);
+					console.log(json)
+					if (json.state == 2000){
+						alert("登录成功!");
+						/* location.assign("/index.html"); 
+						window.location.replace("/index.html");
+					} else {
+						alert("登录失败!" + json.message);
+					} 
+				},
+				"error":function(arg1){
+					alert(arg1);
+					/* alert(XMLHttpRequest.status);
+				　	alert(XMLHttpRequest.readyState);
+				　　	alert(textStatus);
+					alert(errorThrown);
+				}
+			});
+		});  */
+		</script>
+	</body>
+</html>

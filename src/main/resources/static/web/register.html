@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>星海星辰-登录</title>
+<link
+	href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="../css/matery.css">
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
+<link rel="stylesheet"
+	href="../font-awesome-4.7.0/css/font-awesome.min.css">
+
+
+<style>
+canvas { width: 100%; height: 100%; position: absolute; z-index: -1;}
+input[type=button] {
+	
+	background-color: #ff3000;
+	color: #fff;
+}
+
+input[type=button].on {
+	background-color: #eee;
+	color: #ccc;
+	cursor: not-allowed;
+}
+
+#message {
+	width: 130px;
+	height: 50px;
+	background-color: #CCCCCC;
+	text-align: center;
+	line-height: 50px;
+	color: white;
+	display: none;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="center-layout form" style="height: 600px;">
+		<div class="row" style="padding: 30px;">
+			<form id="form-reg" class="col s12" method="post">
+				<div class="row">
+					<h2 class="center-align">注册</h2>
+					<div class="input-field col s12">
+						<i class="material-icons prefix fa fa-envelope-square"></i> 
+						<input
+							id="icon_email" type="text" class="validate" name="username">
+						<label for="icon_email">请输入邮箱</label>
+					</div>
+					<div class="input-field col s12">
+						<i class="material-icons prefix fa fa-key"></i> 
+						<input
+							id="icon_password" type="password" class="validate"
+							name="password"> <label for="icon_password">密码</label>
+					</div>
+					<div class="input-field col s12">
+						<i class="material-icons prefix fa fa-key"></i> 
+						<input
+							id="icon_cpassword" type="password" class="validate"
+							name="c_password"> <label for="icon_cpassword">确认密码</label>
+					</div>
+					<div class="input-field col s8">
+						<input id="icon_code" type="text" class="validate" name="v_code">
+						<label for="icon_code">验证码</label>
+					</div>
+					<div class="col s4">
+						<input type="button" id="get-code" class="btn-lr" value="获取验证码" />
+					</div>
+				</div>
+
+				<div class="input-field col s12">
+					<button id="reg"
+						class="btn waves-effect waves-light center-layout btn-lr" type="button">注册</button>
+				</div>
+				<div class="input-field col s12">
+					<a href="/web/login.html">已有账号</a>
+				</div>
+
+			</form>
+		</div>
+	</div>
+	<div id="message" class="center-layout">你好</div>
+	<canvas></canvas>
+	<script type="text/javascript" src="../js/background.js"></script>
+	<script>
+		$(function() {
+			console.log($(".s12 #btn-lr"))
+			$("#reg").click(function () {
+				//验证邮箱
+				if ($("input[name='username']").val().length == 0) {
+					alert("邮箱不能为空!");
+					return false;
+				} else if (!$("input[name='username']")
+						.val()
+						.match(
+								/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
+					alert("邮箱格式不正确！请重新输入");
+					return false;
+				} else if ($("input[name='password']").val().length == 0) {
+					alert("密码不能为空");
+					return false;
+				} else if ($("input[name='password']").val().length < 5
+						|| $("input[name='password']").val().length > 12) {
+					alert("密码只能在5-12个字符");
+					return false;
+				} else if ($("input[name='password']").val() != $(
+						"input[name='c_password']").val()) {
+					alert("两次密码不匹配");
+					return false;
+				}else if($("input[name='v_code']").val().length == 0){
+					alert("验证码不能为空");
+					return false;
+				} 
+				else{
+					
+				}
+				console.log($("input[name='password']").val().length == 0)
+				$.ajax({
+					"url":"/user/reg",
+					// "cache": false,
+					"data":$("#form-reg").serialize(),
+					"type":"post",
+					"dataType":"json",
+					"success":function (json) {
+						if (json.state == 2000){
+							alert("注册成功!")
+							window.location.replace("/web/login.html");
+						}else if(json.state == 4000){
+							alert(json.message);
+						} else if(json.state == 4003){
+							alert(json.message);
+						} else if(json.state == 4004){
+							alert(json.message); 
+						} else if(json.state == 4005){
+							alert(json.message); 
+						} else {
+							/* alert("注册失败!" + json.message + "已存在") */
+							/* alert(json.message + "错误码" + json.state + "."); */
+						}
+					}
+				});
+			});
+			
+			/* function postComment() {
+				// alert($("input[name='password']").val() == $("input[name='c_password']").val());
+				
+			} */
+			function btnCheck() {
+				/*$(".s4 input").addClass("on");*/
+				var time = 60;
+				/* $(".s4 input").attr("disabled", true); */
+				var timer = setInterval(function() {
+					if (time == 0) {
+						clearInterval(timer);
+						$(".s4 input").attr("disabled", false);
+						$(".s4 input").val("获取验证码");
+						$(".s4 input").removeClass("on");
+					} else {
+						$('.s4 input').css("font-size", "15px")
+						$('.s4 input').val(time + "秒后重新获取");
+						time--;
+					}
+				}, 1000);
+			}
+
+			var message = $("#message");
+			console.log(message);
+
+			$("#get-code").click(function() {
+				var email = $("#icon_email").val();
+				if (email == null || email == "") {
+					alert("请输入邮箱！！！")
+					return;
+				}
+				if (!$("input[name='username']")
+						.val()
+						.match(
+								/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
+					alert("邮箱格式不正确！请重新输入");
+					return;
+				}
+				message.show();
+				message.text("验证码发送中...")
+				
+				$("#get-code").addClass("on");
+				$(".s4 input").attr("disabled", true)
+				console.log("调用方法")
+				$.ajax({
+					url : "/user/getCheckCode?email=" + email,
+					type : "get",
+					dataType : "json",
+					success : function(json) {
+						console.log(json)
+						if (json.state == 2000) {
+							message.text("已发送");
+							sleep1(2000, () => {
+				                console.log("10000")
+				                message.hide();
+				            })
+							
+							btnCheck();
+						} else {
+							console.log("失败")
+						}
+					}
+				});
+			});
+
+			function sleep1(ms, callback) {
+				console.log("休息")
+                setTimeout(callback, ms)
+            }
+		});
+	</script>
+</body>
+</html>

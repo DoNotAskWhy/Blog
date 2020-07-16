@@ -1,0 +1,107 @@
+html, body {margin: 0; padding:0;}
+.logo-img {
+	height: 45px;
+	vertical-align: middle;
+	padding-bottom: 6px;
+}
+
+.logo-span {
+	font-size: 2rem;
+}
+
+header .nav-transparent {
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+}
+
+.navbar-fixed nva{
+	position: fixed;
+}
+
+.bg-color {
+    background-image: linear-gradient(to right, rgba(0, 204, 204, 0.6) 0%, rgba(0, 255, 153, 0.6) 100%);
+}
+
+#nva-ontainer{
+	padding-left: 52px;
+	padding-right: 52px;
+}
+/* mian */
+.container{
+	width: 90%;
+}
+#indexCard{
+	padding-top: 20px;
+}
+.card{
+	border-radius: 12px;
+}
+.card-image{
+	
+	padding:0px 40px 0px 40px;
+}
+
+.card-image img{
+	border-radius: 12px !important;
+}
+
+.card-title{
+	padding: 40px !important;
+}
+
+.read-btn a{
+	margin: 10px 15px;
+	padding: 10px 35px;
+	height: 45px;
+	line-height: 45px;
+	font-size: 1rem;
+	color: #fff;
+	border: 1px solid #fff;
+	background-color: #ff8929;
+	border-radius: 30px;
+	box-shadow: none;
+}
+/* µÇÂ¼×¢²á */
+.center-layout{
+	border-radius: 12px;
+	position: absolute;
+	top: 50%;
+	left:50%;
+	
+	
+	background-image: linear-gradient(to right, rgba(0, 204, 204, 0.6) 0%, rgba(0, 255, 153, 0.6) 100%);
+	z-index: 0;
+	-webkit-transform: translate(-50%, -50%);
+					-moz-transform: translate(-50%, -50%);
+					-ms-transform: translate(-50%, -50%);
+					-o-transform: translate(-50%, -50%);
+					transform: translate(-50%, -50%);
+}
+/* #login{
+	width: 500px;
+	height: 500px;
+} */
+
+.btn-lr{
+		width: 140px;
+	    font-size: 22px;
+	    height: 50px;
+	    border-radius: 40px !important;
+		position: inherit;
+}
+
+.form{
+	width: 500px;
+	height: 500px;
+}
+.title {
+	font-weight: 700;
+	font-size: 3rem;
+	line-height: 1.85em;
+	margin-bottom: 20px;
+	position: relative;
+	color: #FFFFFF;
+	font-family: "Arial", "Microsoft YaHei", "ºÚÌå", "ËÎÌå", sans-serif;
+}
+

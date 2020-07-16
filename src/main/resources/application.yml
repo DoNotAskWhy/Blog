@@ -1,0 +1,73 @@
+﻿spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&useSSL=false
+      username: root
+      password: 
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      max-evictable-idle-time-millis: 60000
+      validation-query: SELECT 1 FROM DUAL
+      # validation-query-timeout: 5000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      #filters: #配置多个英文逗号分隔(统计，sql注入，log4j过滤)
+      filters: stat,wall
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  http:
+    encoding:
+      force: true
+# 邮件服务
+  mail:
+    host:  smtp.qq.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: 你的邮箱
+    password: 
+    port: 465
+    from: 你的邮箱
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+  servlet:
+    multipart:
+        # 设置单个文件大小
+      max-file-size: 50MB
+        # 设置单次请求文件的总大小
+      max-request-size: 50MB
+#开启Mybatis下划线命名转驼峰命名
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+   
+#设置session过期时间
+#server:
+#  servlet:
+#    session:
+#      timeout: 120
+img:
+  location: D:\项目\sts\upload\

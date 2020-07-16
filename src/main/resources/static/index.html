@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>星海星辰-主页</title>
+
+		<!-- Compiled and minified CSS -->
+		<link href="https://cdn.bootcss.com/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+		<!-- 自己用得到的一些样式 -->
+		<link rel="stylesheet" href="css/matery.css" />
+		<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://cdn.bootcss.com/materialize/1.0.0/js/materialize.min.js"></script>
+
+		<!-- 图标库 -->
+		<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/index.css" />
+		<!-- 回到顶部 -->
+		<link rel="stylesheet" href="css/rocket.css">
+
+
+
+		<style>
+			canvas {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: -1;
+}
+
+.sub-nav {
+	position: absolute;
+	top: 66px;
+	list-style: none;
+	margin-left: -40px;
+	background-color: rgba(255, 255, 255, 0.8);
+	border-radius: 12px;
+	display: none;
+}
+
+.sub-nav li {
+	text-align: center;
+	clear: left;
+	width: 140px;
+	height: 35px;
+	line-height: 35px;
+	position: relative;
+}
+
+.sub-nav li a {
+	color: #000000;
+}
+
+#articles {
+	background-color: white;
+	margin-bottom: 20px;
+	border-radius: 10px;
+}
+
+#article {
+	border-bottom: 1px dashed #e9e9e9;
+	padding: 10px;
+}
+
+#article-form {
+	border: 1px solid #d8d2d2;
+	padding: 5px;
+	border-radius: 10px;
+}
+
+#article-title {
+	font-size: 45px;
+	font-weight: bold;
+	margin-left: 10px;
+	display: inline;
+}
+
+#article-text {
+	
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+#article>div {
+	margin-bottom: 10px;
+}
+
+#article div span {
+	color: #d8d2d2;
+}
+
+#tags {
+	height: 50px;
+}
+</style>
+	</head>
+	<body>
+		<header class="navbar-fixed">
+			<nav class="bg-color nav-transparent">
+				<div class="nav-wrapper" id="nva-ontainer">
+					<div class="brand-logo">
+						<a href="/" class="waves-effect waves-light"> <img src="img/logo.png" data-original="https://cdn.jsdelivr.net/gh/athink8/athink8.github.io/medias/logo.png"
+							 class="logo-img" alt="LOGO"> <!-- <img class="responsive-img" src="cool_pic.jpg"> -->
+
+							<span class="logo-span">星海星辰</span>
+						</a>
+					</div>
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						
+						<li><a href="web/message.html">留言板</a></li>
+						<li class="item">
+							<!-- <img class="responsive-img circle" style="width: 50px; height: 50px;" src="./img/6.jpg">
+							<ul class="sub-nav" style="display: none;">
+								<li>
+									<a href="/about">
+										<span>关于我</span>
+									</a>
+								</li>
+								<li>
+									<a href="/logout">
+										<span>退出登录</span>
+									</a>
+								</li> -->
+					</ul>
+					</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<!-- 展示区域 -->
+		<div class="wrap" id="i1"></div>
+		<div class="wrap" style="margin-top: -64px;">
+			<!-- 被轮播的元素父级 -->
+			<div id="recommend" class="swipe">
+				<!-- 被轮播的子元素列表 -->
+				<div class="box">
+					<div class="container">
+						<div class="row">
+							<div class="col s12">
+								<div class="title center-align">阿里云服务器￥67/年</div>
+								<div class="description center-align">
+									阿里云服务器三年203元，平均每年67元，每月6元，比市面上所有的虚拟主机都还要便宜，同时服务器可做的事情更多，可自定义搭配部署等
+								</div>
+								<div class="cover-btns">
+									<a href="https://www.baidu.com/"> <i class="icon fa fa-eye fa-fw"></i>阅读更多
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="box"></div>
+				<div class="box"></div>
+				<div class="box"></div>
+				<div class="box"></div>
+			</div>
+			<div style="z-index: 2;">
+				<div class="btn1 next1" style="color: #0000FF;">
+					<i class="fa fa-chevron-right"></i>
+				</div>
+				<div class="btn1 prev1" style="color: #0000FF;">
+					<i class="fa fa-chevron-left"></i>
+				</div>
+			</div>
+			<ul class="icon-list" style="z-index: 2;">
+				<li data-i="0" class="active"></li>
+				<li data-i="1"></li>
+				<li data-i="2"></li>
+				<li data-i="3"></li>
+				<li data-i="4"></li>
+			</ul>
+		</div>
+		<main>
+			<div id="indexCard">
+				<div class="container">
+
+					<div class="card">
+						<div class="title center-align" style="color: black;">推荐阅读</div>
+						<div class="card-image">
+							<img src="img/1.jpg"> <span id="title" class="card-title"></span>
+						</div>
+						<div class="card-content center-align">
+							<p id="comment"></p>
+						</div>
+						<div class="read-btn" style="text-align: center; padding-bottom: 20px;">
+							<a id="more" href="https://www.baidu.com/"> <i class="icon fa fa-eye fa-fw"></i>阅读更多
+							</a>
+						</div>
+					</div>
+				</div>
+				<div id="articles" class="container">
+					<div id="article">
+						<div>
+							<p id="article-title">wc</p>
+						</div>
+						<div>
+							<p id="article-text" onclick="showArticle()">sajdfljlsajdfkljljsadfljl</p>
+						</div>
+						<div id="tag">
+							<div class="left">
+								<span>2020年05月02日 11:04:17</span>
+							</div>
+							<div class="right">
+								<span class="chip bg-color">标签</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</main>
+		<div style="display: none;" id="rocket-to-top">
+			<div style="opacity: 0; display: block;" class="level-2"></div>
+			<div class="level-3"></div>
+		</div>
+		<footer class="page-footer bg-color">
+			<div class="container">
+				<div class="row">
+					<div class="col l6 s12">
+						<p class="grey-text text-lighten-4">目前网站还处于测试阶段，欢迎使用</p>
+					</div>
+					<div class="col l4 offset-l2 s12">
+						
+					</div>
+				</div>
+			</div>
+			<div class="footer-copyright">
+				<div class="container">
+					© 2020 Copyright xhxc
+					<a href='http://www.beian.miit.gov.cn/' target='_blank' style="font-size: 1em;text-decoration: none;color: white;">滇ICP备19011072号</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/rocket.js"></script>
+	<script>
+		$(function() {
+			
+			determineTheLogin();
+			$(".item").hover( //为li绑定了鼠标进入和鼠标移开的两个参数  
+				function() {
+					$(".sub-nav ").css("display", "block")
+				},
+				function() {
+
+					$(".sub-nav ").css("display", "none")
+				}
+			);
+			showAllArticle();
+			recommend();
+			maxByfabulousSize();
+		});
+
+		function determineTheLogin() {
+			$(".item").empty();
+			$.ajax({
+				"url": "/user/showUsername",
+				// "cache": false,
+				"type": "post",
+				"dataType": "json",
+				"success": function(json) {
+					console.log(json);
+					var list = json.data;
+					/* console.log(json.data.length); */
+					console.log(list);
+					
+					
+					if (json.data.length == 0) {
+
+						html = '<a href="/web/login.html">登录/注册</a>';
+
+					} else {
+						for(var i=0;i<list.authorities.length;i++){
+							console.log(list.authorities[i].authority)
+							if(list.authorities[i].authority == "ROLE_ADMIN"){
+								var html = '<li><a href="web/backstage/user.html">管理员</a></li>';
+								$("#nav-mobile").append(html);
+							}
+						}
+						html = '<img class="responsive-img circle" style="width: 50px; height: 50px;" src="#{image}">' +
+							'<ul class="sub-nav" style="display: none;">' +
+							'<li><a href="/web/about.html">' +
+							'<span>关于我</span></a>' +
+							'</li>' +
+							'<li><a href="/web/article/article-management.html"><span>博客管理</span></a></li>' +
+							'<li><a href="/web/edit.html"><span>写博客</span></a></li>' +
+							'<li><a href="/logout"><span>退出登录</span></a></li>' +
+							'</ul>';
+						html = html.replace(/#{image}/g, list.avatar);
+					}
+					$(".item").append(html);
+				}
+			});
+		}
+
+		function showAllArticle() {
+			$("#articles").empty();
+			$.ajax({
+					"url": "/article/getAllsArticle",
+					// "cache": false,
+					"type": "post",
+					"dataType": "json",
+					"success": function(json) {
+						if (json.state == 2000) {
+							var list = json.data;
+							if (list == null) {
+								return
+							}
+							for (var i = 0; i < list.length;i++) {
+								var html = '<div id="article" class="container">' +
+									'<div>' +
+									'<p id="article-title">#{title}</p>' +
+									'</div>' +
+									'<div>' +
+									'<p id="article-text" onclick="showArticle(&quot;' + list[i].aid + '&quot;)">#{textContent}</p>' +
+									'</div>' +
+									'<div id="tags">' +
+									'<div class="left">' +
+									'<span>#{date}</span>' +
+									'</div>' +
+									'<div id="tag'+i+'" class="right">' +
+									
+									'</div>' +
+									'</div>' +
+									'</div>';
+									/* console.log(list[i].tags) */
+									html = html.replace(/#{title}/g, list[i].title);
+								html = html.replace(/#{date}/g, list[i].date);
+								html = html.replace(/#{textContent}/g, list[i].textContent);
+								$("#articles").append(html);
+								
+								if(list[i].tags != null){
+								for(var j=0;j<list[i].tags.length;j++){
+									/* console.log("第" + i + "次:")
+									console.log(list[i].tags[j]) */
+									var html1 = '<span class="chip bg-color">#{name}</span>';
+									html1 = html1.replace(/#{name}/g, list[i].tags[j].name);
+									$("#tag"+i).append(html1);
+								}
+								}
+								
+							}
+						}
+						
+					}
+			})
+		}
+		
+		function recommend(){
+			
+			$("#recommend").empty();
+			$.ajax({
+				"url": "/article/getAeticleLimit",
+				// "cache": false,
+				"type": "post",
+				"dataType": "json",
+				"success": function(json) {
+					if (json.state == 2000) {
+						var list = json.data;
+						if (list == null) {
+							return
+						}
+						var i;
+						for (i = 0; i < list.length;i++) {
+							var html = 
+								'<div class="box">'+
+							'<div class="container">'+
+								'<div class="row">'+
+									'<div class="col s12">'+
+										'<div class="title center-align">#{title}</div>'+
+										'<div class="description center-align">#{textContent}</div>'+
+										'<div class="cover-btns">'+
+											'<a href="/web/article/article.html?aid=#{aid}"> <i class="icon fa fa-eye fa-fw"></i>阅读更多'+
+											'</a>'+
+										'</div>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>';
+								/* console.log(list[i].tags) */
+							html = html.replace(/#{title}/g, list[i].title);
+							html = html.replace(/#{aid}/g, list[i].aid);
+							html = html.replace(/#{textContent}/g, list[i].textContent);
+							$("#recommend").append(html);
+						}
+						console.log(i);
+						if(list.length < 6){
+							console.log(list.length- i);
+							for(var j=0;j<5-i;j++){
+								var html = 
+									'<div class="box">'+
+								'<div class="container">'+
+									'<div class="row">'+
+										'<div class="col s12">'+
+											'<div class="title center-align">诚招广告位</div>'+
+										'</div>'+
+									'</div>'+
+								'</div>'+
+							'</div>';
+							$("#recommend").append(html);
+							}
+						}
+					}
+					
+				}
+		})
+		}
+		
+		function maxByfabulousSize(){
+			$.ajax({
+				"url": "/article/getMaxByfabulousSize",
+				// "cache": false,
+				"type": "post",
+				"dataType": "json",
+				"success": function(json) {
+					var list = json.data;
+					console.log(list);
+					$("#more").attr("href","/web/article/article.html?aid="+ list.aid);
+					$("#title").text(list.title);
+					$("#comment").text(list.textContent);
+				}
+			});
+		}
+
+		function showArticle(aid) {
+			window.location.href = "/web/article/article.html?aid=" + aid;
+		}
+	</script>
+	
+</html>
